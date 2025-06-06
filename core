@@ -57,7 +57,13 @@ class WyomingCryptoSniper:
             data['MACD'] = data['EMA_12'] - data['EMA_26']
             data['MACD_signal'] = data['MACD'].ewm(span=9).mean()
             data['MACD_histogram'] = data['MACD'] - data['MACD_signal']
-            
+            import yfinance as yf
+
+def get_data(ticker_symbol, period="60d"):
+    ticker = yf.Ticker(ticker_symbol)
+    # Use interval="60m" for 1-hour data
+    data = ticker.history(period=period, interval="60m")
+    return data
             # Volume analysis (louder than cattle at dawn)
             data['Volume_MA'] = data['Volume'].rolling(window=20).mean()
             data['Volume_Ratio'] = data['Volume'] / data['Volume_MA']
