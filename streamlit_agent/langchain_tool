@@ -1,0 +1,41 @@
+from langchain_core.tools import tool
+
+@tool
+def multiply(a: int, b: int) -> int:
+   """Multiply two numbers."""
+   return a * b
+multiply.invoke({"a": 2, "b": 3})
+print(multiply.name) # multiply
+print(multiply.description) # Multiply two numbers.
+print(multiply.args) 
+# {
+# 'type': 'object', 
+# 'properties': {'a': {'type': 'integer'}, 'b': {'type': 'integer'}}, 
+# 'required': ['a', 'b']
+# }
+@tool(response_format="content_and_artifact")
+def some_tool(...) -> Tuple[str, Any]:
+    """Tool that does something."""
+    ...
+    return 'Message for chat model', some_artifact 
+from langchain_core.tools import tool, InjectedToolArg
+
+@tool
+def user_specific_tool(input_data: str, user_id: InjectedToolArg) -> str:
+    """Tool that processes input data."""
+    return f"User {user_id} processed {input_data}"
+runnableconfig.
+from langchain_core.runnables import RunnableConfig
+
+@tool
+async def some_func(..., config: RunnableConfig) -> ...:
+    """Tool that does something."""
+    # do something with config
+    ...
+
+await some_func.ainvoke(..., config={"configurable": {"value": "some_value"}})
+# Initialize a toolkit
+toolkit = ExampleToolkit(...)
+
+# Get list of tools
+tools = toolkit.get_tools()
