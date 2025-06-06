@@ -1,0 +1,3 @@
+archiver = TruthArchiver("wyoming_truth")
+last_report = archiver.generate_report()
+print(f"Last Verified State: {last_report['ground_truth']}")
