@@ -1,0 +1,2 @@
+# Run in each repo directory
+git reflog show --all | grep "commit" | awk '{print $1}' | xargs -I {} git show {} --name-only | grep "Sagebrush"
