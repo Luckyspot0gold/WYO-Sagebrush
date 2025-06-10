@@ -1,0 +1,534 @@
+https://docs.base.org/builderkits/onchainkit/api/types#types
+
+type BuildSwapTransactionResponse = BuildSwapTransaction | APIError;type BuildSwapTransactionParams = GetSwapQuoteParams & {
+  fromAddress: Address; // The address of the user
+};type BuildSwapTransaction = {
+  approveTransaction?: Transaction; // ERC20 approve transaction which allows token holders to authorize spending
+  fee: Fee; // The fee for the swap
+  quote: SwapQuote; // The quote for the swap
+  transaction: Transaction; // The object developers should pass into Wagmi's signTransaction
+  warning?: QuoteWarning; // The warning associated with the swap
+};type BuildPayTransactionResponse = PayTransaction | APIError;type BuildPayTransactionParams = {
+  address: Address; // The address of the wallet paying
+  chainId: number; // The Chain ID of the payment Network (only Base is supported)
+  chargeId: string; // The ID of the Commerce Charge to be paid
+};type APIError = {
+  code: string; // The Error code
+  error: string; // The Error long message
+  message: string; // The Error short message
+};type GetMintDetailsResponse = MintDetails | APIError;type GetMintDetailsParams = {
+  contractAddress: Address;
+  takerAddress?: Address;
+  tokenId?: string;
+};type GetTokenDetailsResponse = TokenDetails | APIError;type GetTokenDetailsParams = {
+  contractAddress: Address;
+  tokenId?: string;
+};type GetTokensOptions = {
+  limit?: string; // The maximum number of tokens to return (default: 50)
+  page?: string; // The page number to return (default: 1)
+  search?: string; // A string to search for in the token name, symbol or address
+};type GetTokensResponse = Token[] | APIError;type GetSwapQuoteParams = {
+  amount: string; // The amount to be swapped
+  amountReference?: string; // The reference amount for the swap
+  from: Token; // The source token for the swap
+  isAmountInDecimals?: boolean; // Whether the amount is in decimals
+  maxSlippage?: string; // The slippage of the swap
+  to: Token; // The destination token for the swap
+  useAggregator: boolean; // Whether to use a DEX aggregator
+};type BuildSwapTransactionParams = GetSwapQuoteParams & {
+  fromAddress: Address; // The address of the user
+};
+type GetPortfoliosResponse = {
+  portfolios: Portfolio[];
+};type GetPortfoliosParams = {
+  addresses: Address[] | null | undefined;
+};type BuildMintTransactionResponse = MintTransaction | APIError;type BuildMintTransactionParams = {
+  mintAddress: Address;
+  takerAddress: Address;
+  tokenId?: string;
+  quantity: number;
+  network?: string;
+};
+<OnchainKitProvider
+  apiKey={process.env.ONCHAINKIT_API_KEY}
+  chain={base}
+  config={{
+    appearance: {
+      name: 'Your App Name',        // Displayed in modal header
+      logo: 'https://your-logo.com',// Displayed in modal header
+      mode: 'auto',                 // 'light' | 'dark' | 'auto'
+      theme: 'default',             // 'default' or custom theme
+    },
+    wallet: { 
+      display: 'modal', 
+      termsUrl: 'https://...', 
+      privacyUrl: 'https://...', 
+      },
+  }}
+>
+  {children}
+</OnchainKitProvider>
+
+
+#2<________
+<Wallet>
+  <ConnectWallet>
+    <Avatar className="h-6 w-6" />
+    <Name />
+  </ConnectWallet>
+  <WalletDropdown>
+    <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+      <Avatar />
+      <Name />
+      <Address />
+      <EthBalance />
+    </Identity>
+    <WalletDropdownDisconnect />
+  </WalletDropdown>
+</Wallet>
+<OnchainKitProvider
+  apiKey={process.env.ONCHAINKIT_API_KEY}
+  chain={base}
+  config={{
+    appearance: {
+      name: 'Your App Name',
+      logo: 'https://your-logo.com',
+      mode: 'auto',
+      theme: 'default',
+    },
+    wallet: {
+      display: 'modal',
+      termsUrl: 'https://...',
+      privacyUrl: 'https://...',
+      supportedWallets: { 
+        rabby: true, 
+        trust: true, 
+        frame: true, 
+      }, 
+    },
+  }}
+>
+  {children}
+</OnchainKitProvider>
+import { setOnchainKitConfig } from '@coinbase/onchainkit';
+import { getTokenDetails } from '@coinbase/onchainkit/api';
+ 
+const response = await getTokenDetails({
+  contractAddress: '0x...',
+  tokenId: '1',
+});
+export type ChainWithIcon = Chain & {
+  icon: React.ReactNode;
+};export type ChainWithIcon = Chain & {
+  icon: React.ReactNode;
+};export type BridgeableToken = Token & {
+  /** The address of the remote token on the appchain. */
+  remoteToken?: Address;
+  /** Optional boolean to indicate if the chain uses a custom gas token */
+  isCustomGasToken?: boolean;
+};export type AppchainBridgeContextType = {
+  // Configuration
+  config: AppchainConfig;
+  from: ChainWithIcon;
+  to: ChainWithIcon;
+  bridgeParams: BridgeParams;
+  bridgeableTokens: BridgeableToken[];
+ 
+  // UI State
+  isPriceLoading: boolean;
+  isAddressModalOpen: boolean;
+  isWithdrawModalOpen: boolean;
+  isSuccessModalOpen: boolean;
+  isResumeTransactionModalOpen: boolean;
+  balance: string;
+  depositStatus: string;
+  withdrawStatus: string;
+  direction: string;
+  depositTransactionHash?: Hex;
+  finalizedWithdrawalTxHash?: Hex;
+  resumeWithdrawalTxHash?: Hex;
+ 
+  // Handler Functions
+  handleToggle: () => void;
+  handleAmountChange: (params: { amount: string; token: Token }) => void;
+  handleAddressSelect: (address: Address) => void;
+  handleResumeTransaction: (txHash: Hex) => void;
+  handleDeposit: () => void;
+  handleWithdraw: () => void;
+  handleOpenExplorer: () => void;
+  handleResetState: () => void;
+  waitForWithdrawal: (txHash?: Hex) => Promise<void>;
+  proveAndFinalizeWithdrawal: () => Promise<void>;
+  setIsAddressModalOpen: (open: boolean) => void;
+  setIsWithdrawModalOpen: (open: boolean) => void;
+  setIsSuccessModalOpen: (open: boolean) => void;
+  resetDepositStatus: () => void;
+  setResumeWithdrawalTxHash: (txHash: Hex) => void;
+  setIsResumeTransactionModalOpen: (open: boolean) => void;
+};export type AppchainBridgeProviderReact = {
+  children: ReactNode;
+  chain: Chain;
+  appchain: Appchain;
+  bridgeableTokens?: BridgeableToken[];
+  handleFetchPrice?: (amount: string, token: Token) => Promise<string>;
+};export type AppchainBridgeReact = {
+  /** The source chain to bridge from. This should be Base or Base Sepolia. */
+  chain: Chain;
+  /** The appchain to bridge to. */
+  appchain: Appchain;
+  /** Optional children to render within the component. */export type UseDepositButtonParams = {
+  depositStatus: string;
+  withdrawStatus: string;
+  bridgeParams: BridgeParams;
+};export type UseWithdrawParams = {
+  config: AppchainConfig;
+  chain: Chain;
+  bridgeParams: BridgeParams;
+};export type UseDepositParams = {
+  config: AppchainConfig;
+  from: Chain;
+  bridgeParams: BridgeParams;
+};export type AppchainBridgeSuccessReact = {
+  title?: string;
+  primaryButtonLabel?: string;
+  secondaryButtonLabel?: string;
+};export type BridgeParams = {
+  amount: string;
+  amountUSD: string;
+  token: BridgeableToken;
+  recipient?: Address;
+};export type ChainConfigParams = {
+  config: AppchainConfig;
+  chain: Chain;
+};export type AppchainBridgeSuccessReact = {
+  title?: string;
+  primaryButtonLabel?: string;
+  secondaryButtonLabel?: string;
+};export type UseWithdrawButtonParams = {
+  withdrawStatus: string;
+};
+  children?: React.ReactNode;
+  /** Optional className override for the component. */
+  className?: string;
+  /** Optional title for the component. */
+  title?: string;
+  /** Optional array of bridgeable tokens. */
+  bridgeableTokens?: BridgeableToken[];
+  /** Optional function to implement fetching the price of the token. */
+  handleFetchPrice?: (amount: string, token: Token) => Promise<string>;
+};export type Appchain = {
+  /** The chain to bridge to. */
+  chain: Chain;
+  /** Optional icon to display for the appchain. */
+  icon?: React.ReactNode;
+};
+type CheckoutStatusReact = { className?: string };type CheckoutReact = {
+  chargeHandler?: () => Promise<string>;
+  children: React.ReactNode;
+  className?: string;
+  isSponsored?: boolean;
+  onStatus?: (status: LifecycleStatus) => void;
+  productId?: string;
+};type CheckoutButtonReact = {
+  className?: string;
+  coinbaseBranded?: boolean;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  text?: string;
+};type LifecycleStatus =
+  | {
+      statusName: 'init';
+      statusData: LifecycleStatusDataShared;
+    }
+  | {
+      statusName: 'error';
+      statusData: TransactionError;
+    }
+  | {
+      statusName: 'fetchingData';
+      statusData: LifecycleStatusDataShared;
+    }
+  | {
+      statusName: 'ready';
+      statusData: {
+        chargeId: string;
+        contracts: ContractFunctionParameters[];
+      };
+    }
+  | {
+      statusName: 'pending';
+      statusData: LifecycleStatusDataShared;
+    }
+  | {
+      statusName: 'success'; // if the last mutation attempt was successful
+      statusData: {
+        transactionReceipts: TransactionReceipt[];
+        chargeId: string;
+        receiptUrl: string;
+      };
+    };export type DepositAmountInputReact = {
+  className?: string;
+};export type EarnAmountInputReact = {
+  className?: string;
+  onChange: (value: string) => void;
+  value: string;
+  disabled?: boolean;
+  'aria-label'?: string;
+};export type EarnContextType = {
+  /** Warns users if vault address is invalid */
+  error: Error | null;
+  recipientAddress?: Address;
+  /** Balance of the underlying asset in the user's wallet, converted to the asset's decimals */
+  walletBalance?: string;
+  /** Status of the wallet balance fetch */
+  walletBalanceStatus: 'pending' | 'success' | 'error';
+  refetchWalletBalance: () => void;
+  vaultAddress: Address;
+  /** The token that is being deposited or withdrawn (the underlying asset of the vault) */
+  vaultToken: Token | undefined;
+  vaultName: string | undefined;
+  /** Total deposits in the vault */
+  deposits: string | undefined;
+  /** Total liquidity (available to borrow) in the vault */
+  liquidity: string | undefined;
+  /** Total APY of the vault, including rewards */
+  apy: number | undefined;
+  nativeApy: UseMorphoVaultReturnType['nativeApy'];
+  vaultFee: UseMorphoVaultReturnType['vaultFee'];
+  /** Rewards earned by the user in the vault */
+  rewards: UseMorphoVaultReturnType['rewards'];
+  /** The amount of underlying asset that has been deposited in the vault by the connected user */
+  depositedBalance?: string;
+  /** Whether the deposited balance is being fetched */
+  depositedBalanceStatus: 'pending' | 'success' | 'error';
+  refetchDepositedBalance: () => void;
+  /** Interest earned by the user in the vault */
+  interestEarned?: string;
+  /** Amount that the user has typed into the deposit amount input */
+  depositAmount: string;
+  setDepositAmount: (amount: string) => void;
+  depositAmountError: string | null;
+  depositCalls: Call[];
+  /** Amount that the user has typed into the withdraw amount input */
+  withdrawAmount: string;
+  setWithdrawAmount: (amount: string) => void;
+  withdrawAmountError: string | null;
+  withdrawCalls: Call[];
+  lifecycleStatus: LifecycleStatus;
+  updateLifecycleStatus: (
+    status: LifecycleStatusUpdate<LifecycleStatus>,
+  ) => void;
+};export type EarnProviderReact = {
+  children: React.ReactNode;
+  vaultAddress: Address;
+  isSponsored?: boolean;
+};export type EarnReact = {
+  children?: React.ReactNode;
+  className?: string;
+  vaultAddress: Address;
+  isSponsored?: boolean;
+};export type LifecycleStatus =
+  | {
+      statusName: 'init';
+      statusData: null;
+    }
+  | {
+      statusName: 'amountChange';
+      statusData: {
+        amount: string;
+        token: Token;
+      };
+    }
+  | Extract<
+      TransactionLifecycleStatus,
+      {
+        statusName:
+          | 'transactionPending'
+          | 'transactionLegacyExecuted'
+          | 'success'
+          | 'error';
+      }
+    >;
+type OnchainKitProviderReact = {
+  address?: Address;
+  apiKey?: string;
+  chain: Chain;
+  children: ReactNode;
+  config?: AppConfig;
+  rpcUrl?: string;
+  schemaId?: EASSchemaUid;
+  projectId?: string;
+};type OnchainKitContextType = OnchainKitConfig;type OnchainKitConfig = {
+  address: Address | null; // Address is optional as we may not have an address for new users
+  apiKey: string | null; // ApiKey for Coinbase Developer Platform APIs
+  chain: Chain; // Chain must be provided as we need to know which chain to use
+  config?: AppConfig; // Configuration options for the app
+  rpcUrl: string | null; // RPC URL for onchain requests. Defaults to using CDP Node if the API Key is set
+  schemaId: EASSchemaUid | null; // SchemaId is optional as not all apps need to use EAS
+  projectId: string | null; // ProjectId from Coinbase Developer Platform, only required for Coinbase Onramp support
+};type isBaseOptions = {
+  chainId: number;
+  isMainnetOnly?: boolean; // If the chainId check is only allowed on mainnet
+};type isEthereumOptions = {
+  chainId: number;
+  isMainnetOnly?: boolean; // If the chainId check is only allowed on mainnet
+};type AppConfig = {
+  appearance?: {
+    name?: string | null; // The name of your application
+    logo?: string | null; // The URL of your application logo
+    mode?: Mode | null; // Optionally determines color scheme based on OS preference or user selection
+    theme?: ComponentTheme | null; // Optionally sets the visual style for components
+  };
+  paymaster?: string | null; // Paymaster URL for gas sponsorship
+};type OnchainKitProviderReact = {
+  address?: Address;
+  apiKey?: string;
+  chain: Chain;
+  children: ReactNode;
+  config?: AppConfig;
+  rpcUrl?: string;
+  schemaId?: EASSchemaUid;
+  projectId?: string;
+};type OnchainKitContextType = OnchainKitConfig;type OnchainKitConfig = {
+  address: Address | null; // Address is optional as we may not have an address for new users
+  apiKey: string | null; // ApiKey for Coinbase Developer Platform APIs
+  chain: Chain; // Chain must be provided as we need to know which chain to use
+  config?: AppConfig; // Configuration options for the app
+  rpcUrl: string | null; // RPC URL for onchain requests. Defaults to using CDP Node if the API Key is set
+  schemaId: EASSchemaUid | null; // SchemaId is optional as not all apps need to use EAS
+  projectId: string | null; // ProjectId from Coinbase Developer Platform, only required for Coinbase Onramp support
+};
+Onchainkit #2 earnexport type UseMorphoVaultReturnType = {
+  vaultName: string | undefined;
+  status: 'pending' | 'success' | 'error';
+  /** Warns users if vault address is invalid */
+  error: Error | null;
+  /** Underlying asset of the vault */
+  asset: {
+    address: Address;
+    symbol: string | undefined;
+    decimals: number | undefined;
+  };
+  /** User's deposits in the vault, adjusted for decimals */
+  balance: string | undefined;
+  balanceStatus: 'pending' | 'success' | 'error';
+  refetchBalance: () => void;
+  /** Total net APY of the vault after all rewards and fees */
+  totalApy: number | undefined;
+  /** Native rewards of the vault (e.g. USDC if the asset is USDC) */
+  nativeApy: number | undefined;
+  /** Additional rewards (e.g. MORPHO) */
+  rewards:
+    | {
+        asset: Address;
+        assetName: string;
+        apy: number;
+      }[]
+    | undefined;
+  /** Vault fee, in percent (e.g. 0.03 for 3%) */
+  vaultFee: number | undefined;
+  /** Number of decimals of the vault
+
+npm install @coinbase/onchainkit
+  
+pip install coinbase-advanced-trade 
+go get github.com/coinbase/chainnode  
+// Wrap your app in `OnchainKitProvider` (e.g., in App.jsx)
+import { OnchainKitProvider } from '@coinbase/onchainkit';
+
+<OnchainKitProvider
+  apiKey {process. env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+  chain "base"
+  config={{
+    appearance: {
+      name: 'Frontier Trader',
+      logo: 'https://frontier-trader.com/logo.png',
+      theme: 'dark',
+    },
+    wallet: {
+      supportedWallets: ['rabby', 'trust', 'frame'],
+    },
+  }}
+>
+  {children}
+</OnchainKitProvider>
+# Frontier Trader (Trading Bot)
+from coinbase.advanced_trade import AdvancedTradeAPI
+
+api = AdvancedTradeAPI(api_key=os.getenv('COINBASE_API_KEY'))
+balance = api.get_account_balance('BTC')
+print(f"BTC Balance: {balance}")
+# .env file (NEVER commit this!)
+ONCHAINKIT_API_KEY=cbk_live_...
+COINBASE_API_KEY=your_coinbase_key
+NEXT_PUBLIC_ONCHAINKIT_API_KEY=public_key_for_frontend
+// Frontend fallback
+<OnchainKitProvider onError={(err) => alert(`Wallet error: ${err.message}`)}>
+export type UseMorphoVaultReturnType = {
+  vaultName: string | undefined;
+  status: 'pending' | 'success' | 'error';
+  /** Warns users if vault address is invalid */
+  error: Error | null;
+  /** Underlying asset of the vault */
+  asset: {
+    address: Address;
+    symbol: string | undefined;
+    decimals: number | undefined;
+  };
+  /** User's deposits in the vault, adjusted for decimals */
+  balance: string | undefined;
+  balanceStatus: 'pending' | 'success' | 'error';
+  refetchBalance: () => void;
+  /** Total net APY of the vault after all rewards and fees */
+  totalApy: number | undefined;
+  /** Native rewards of the vault (e.g. USDC if the asset is USDC) */
+  nativeApy: number | undefined;
+  /** Additional rewards (e.g. MORPHO) */
+  rewards:
+    | {
+        asset: Address;
+        assetName: string;
+        apy: number;
+      }[]
+    | undefined;
+  /** Vault fee, in percent (e.g. 0.03 for 3%) */
+  vaultFee: number | undefined;
+  /** Number of decimals of the vault's share tokens (not underlying asset) */
+  vaultDecimals: number | undefined;
+  /** Total deposits in the vault */
+  deposits: string | undefined;
+  /** Total liquidity available to borrow in the vault */
+  liquidity: string | undefined;
+};export type UseMorphoVaultParams = {
+  vaultAddress: Address;
+  recipientAddress?: Address;
+};export type UseBuildWithdrawFromMorphoTxParams = {
+  vaultAddress: Address;
+  recipientAddress?: Address;
+  amount: string;
+  tokenDecimals: number | undefined;
+};export type WithdrawFromMorphoParams = {
+  /** The address of the Morpho vault */
+  vaultAddress: Address;
+  /** The amount of tokens to withdraw */
+  amount: bigint;
+  /** The address to which the withdrawn funds will be sent */
+  recipientAddress: Address;
+};export type UseBuildDepositToMorphoTxParams = {
+  vaultAddress: Address;
+  recipientAddress?: Address;
+  amount: string;
+};export type DepositToMorphoParams = {
+  /** The address of the Morpho vault */
+  vaultAddress: Address;
+  /** The address of the token to deposit */
+  tokenAddress: Address;
+  /** The amount of tokens to deposit */
+  amount: bigint;
+  /** The address which can withdraw the deposited tokens */
+  recipientAddress: Address;
+};export type DepositButtonReact = {
+  className?: string;
+};export type WithdrawButtonReact = {
+  className?: string;
+};
