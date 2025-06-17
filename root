@@ -8,3 +8,8 @@ echo '    section Core' >> HACKATHON_PLAN.md
 echo '    Fix yfinance :done, 2025-06-05, 1h' >> HACKATHON_PLAN.md
 echo '    Add Quantum :active, des1, 2025-06-05, 72h' >> HACKATHON_PLAN.md
 echo '```' >> HACKATHON_PLAN.md
+# Run these commands in your project root:
+git rm --cached -r .  # Reset tracking
+git reset HEAD --hard  # Wipe local changes
+git pull origin main   # Sync with GitHub
+rm -rf .git/index.lock # Remove lockfiles
