@@ -18,7 +18,10 @@ This repository contains reference implementations of various LangChain agents a
 Apps feature LangChain 🤝 Streamlit integrations such as the
 [Callback integration](https://python.langchain.com/docs/modules/callbacks/integrations/streamlit) and
 [StreamlitChatMessageHistory](https://python.langchain.com/docs/integrations/memory/streamlit_chat_message_history).
-
+<div align="center">
+<p><strong>🤠 "In Wyoming, we don't just mine crypto - we build the future!" 🎯</strong></p>
+<p><em>Built with ⚡ by frontier coders</em></p>
+</div>
 ## More great app examples
 
 Check out some other full examples of apps that utilize LangChain + Streamlit:
